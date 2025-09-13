@@ -1,119 +1,105 @@
-# Next.js SaaS Starter
+# Visual Browser Marketing Website
 
-This is a starter template for building a SaaS application using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in users.
+AI-powered web testing platform with latest CUA models. Advanced browser automation with full media capture and intelligent visual analysis.
 
-**Demo: [https://next-saas-start.vercel.app/](https://next-saas-start.vercel.app/)**
+**Live Demo:** [FastAiDev.xyz](https://FastAiDev.xyz)
 
-## Features
+## 🚀 Features
 
-- Marketing landing page (`/`) with animated Terminal element
-- Pricing page (`/pricing`) which connects to Stripe Checkout
-- Dashboard pages with CRUD operations on users/teams
-- Basic RBAC with Owner and Member roles
-- Subscription management with Stripe Customer Portal
-- Email/password authentication with JWTs stored to cookies
-- Global middleware to protect logged-in routes
-- Local middleware to protect Server Actions or validate Zod schemas
-- Activity logging system for any user events
+- **AI Visual Analysis** - Powered by latest CUA models for intelligent web page analysis
+- **Full Media Capture** - Complete video recordings, audio capture, and high-resolution screenshots
+- **Export Everything** - Download all videos, audio, screenshots, and AI analysis reports
+- **Early Access Signup** - Email collection system for launch notifications
+- **Launch Special Pricing** - ~~$5/hour~~ → **$3/hour** special launch price
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **Database**: [Postgres](https://www.postgresql.org/)
-- **ORM**: [Drizzle](https://orm.drizzle.team/)
-- **Payments**: [Stripe](https://stripe.com/)
-- **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
+- **Framework**: [Next.js 15](https://nextjs.org/) with TypeScript
+- **Database**: [PostgreSQL](https://www.postgresql.org/) with Drizzle ORM
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
+- **Email Collection**: Custom API endpoints with database integration
+- **Deployment**: Optimized for Vercel
 
-## Getting Started
+## 🏃‍♂️ Quick Start
 
 ```bash
-git clone https://github.com/nextjs/saas-starter
-cd saas-starter
-pnpm install
+git clone https://github.com/jeffersonwarrior/next-js-saas-starter
+cd next-js-saas-starter
+npm install
 ```
 
-## Running Locally
+## 🔧 Development Setup
 
-[Install](https://docs.stripe.com/stripe-cli) and log in to your Stripe account:
+### Environment Variables
+
+Create a `.env` file:
 
 ```bash
-stripe login
+POSTGRES_URL=postgresql://your_db_url
+BASE_URL=http://localhost:3000
+AUTH_SECRET=your_random_secret
 ```
 
-Use the included setup script to create your `.env` file:
+### Database Setup
 
 ```bash
-pnpm db:setup
+npm run db:setup
+npm run db:migrate
+npm run db:seed
 ```
 
-Run the database migrations and seed the database with a default user and team:
+### Run Development Server
 
 ```bash
-pnpm db:migrate
-pnpm db:seed
+npm run dev
 ```
 
-This will create the following user and team:
+Open [http://localhost:3000](http://localhost:3000) to see the Visual Browser marketing site.
 
-- User: `test@test.com`
-- Password: `admin123`
+## 📊 Email Signup System
 
-You can also create new users through the `/sign-up` route.
+The website includes a functional email collection system:
 
-Finally, run the Next.js development server:
+- **API Endpoint**: `/api/signup` handles email submissions
+- **Database Table**: `email_signups` stores leads with timestamps
+- **Validation**: Email format validation and duplicate prevention
+- **UI Feedback**: Success/error messages for user experience
+
+## 🎯 Marketing Features
+
+- **Strike-through Pricing** - Visual price reduction for urgency
+- **Launch Special** - Limited-time offer messaging
+- **GitHub Integration** - Direct link to MCP server installation
+- **Developer Focus** - Technical positioning for AI/automation developers
+- **Fast AI Dev Branding** - Clear publisher identification
+
+## 🔗 Related Projects
+
+- **MCP Server**: [Install Visual Browser MCP](https://github.com/fastaidev/visual-browser-mcp)
+- **Publisher**: [Fast AI Development Company](https://FastAiDev.xyz)
+- **Browser Testing Framework**: Located in `../browsertest`
+
+## 🚀 Deploy to Production
+
+### Vercel Deployment
+
+1. Connect your GitHub repository to [Vercel](https://vercel.com/)
+2. Add environment variables in Vercel dashboard
+3. Deploy automatically on push to main
+
+### Environment Variables for Production
 
 ```bash
-pnpm dev
+POSTGRES_URL=your_production_db_url
+BASE_URL=https://your-domain.com
+AUTH_SECRET=your_secure_random_string
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
+## 📝 License
 
-You can listen for Stripe webhooks locally through their CLI to handle subscription change events:
+MIT License - Built on Next.js SaaS Starter template
 
-```bash
-stripe listen --forward-to localhost:3000/api/stripe/webhook
-```
+---
 
-## Testing Payments
-
-To test Stripe payments, use the following test card details:
-
-- Card Number: `4242 4242 4242 4242`
-- Expiration: Any future date
-- CVC: Any 3-digit number
-
-## Going to Production
-
-When you're ready to deploy your SaaS application to production, follow these steps:
-
-### Set up a production Stripe webhook
-
-1. Go to the Stripe Dashboard and create a new webhook for your production environment.
-2. Set the endpoint URL to your production API route (e.g., `https://yourdomain.com/api/stripe/webhook`).
-3. Select the events you want to listen for (e.g., `checkout.session.completed`, `customer.subscription.updated`).
-
-### Deploy to Vercel
-
-1. Push your code to a GitHub repository.
-2. Connect your repository to [Vercel](https://vercel.com/) and deploy it.
-3. Follow the Vercel deployment process, which will guide you through setting up your project.
-
-### Add environment variables
-
-In your Vercel project settings (or during deployment), add all the necessary environment variables. Make sure to update the values for the production environment, including:
-
-1. `BASE_URL`: Set this to your production domain.
-2. `STRIPE_SECRET_KEY`: Use your Stripe secret key for the production environment.
-3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
-4. `POSTGRES_URL`: Set this to your production database URL.
-5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
-
-## Other Templates
-
-While this template is intentionally minimal and to be used as a learning resource, there are other paid versions in the community which are more full-featured:
-
-- https://achromatic.dev
-- https://shipfa.st
-- https://makerkit.dev
-- https://zerotoshipped.com
-- https://turbostarter.dev
+**Visual Browser** - Advanced AI web testing platform  
+*Developed by Fast AI Development Company*
