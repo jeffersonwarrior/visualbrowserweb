@@ -15,31 +15,13 @@ export function EmailSignup() {
     setIsLoading(true);
     setMessage('');
 
-    try {
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, source: 'homepage' }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage(data.message);
-        setIsSuccess(true);
-        setEmail('');
-      } else {
-        setMessage(data.error || 'Something went wrong');
-        setIsSuccess(false);
-      }
-    } catch (error) {
-      setMessage('Network error. Please try again.');
-      setIsSuccess(false);
-    } finally {
+    // Simulate submission for demo
+    setTimeout(() => {
+      setMessage('Thank you! We\'ll notify you when Visual Browser launches.');
+      setIsSuccess(true);
+      setEmail('');
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   return (
