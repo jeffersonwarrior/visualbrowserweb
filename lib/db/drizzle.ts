@@ -12,11 +12,9 @@ let db: ReturnType<typeof drizzle>;
 if (process.env.POSTGRES_URL) {
   client = postgres(process.env.POSTGRES_URL);
   db = drizzle(client, { schema });
-} else if (process.env.NODE_ENV === 'production') {
-  throw new Error('POSTGRES_URL environment variable is not set');
 } else {
-  // For build-time or development without DB, create a mock
-  client = postgres('postgresql://localhost:5432/mock');
+  // For build-time or development without DB, create a mock connection that won't actually connect
+  client = postgres('postgresql://localhost:5432/mock', { max: 1, idle_timeout: 1, connect_timeout: 1 });
   db = drizzle(client, { schema });
 }
 

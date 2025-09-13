@@ -105,26 +105,62 @@ export async function getTeamForUser() {
     return null;
   }
 
-  const result = await db.query.teamMembers.findFirst({
-    where: eq(teamMembers.userId, user.id),
-    with: {
-      team: {
-        with: {
-          teamMembers: {
-            with: {
-              user: {
-                columns: {
-                  id: true,
-                  name: true,
-                  email: true
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  });
+  // First get the user's team
+  const userTeamMember = await db
+    .select({
+      teamId: teamMembers.teamId,
+    })
+    .from(teamMembers)
+    .where(eq(teamMembers.userId, user.id))
+    .limit(1)
+    .then((rows) => rows[0] || null);
 
-  return result?.team || null;
+  if (!userTeamMember) {
+    return null;
+  }
+
+  // Then get the full team data with all members
+  const team = await db
+    .select({
+      id: teams.id,
+      name: teams.name,
+      createdAt: teams.createdAt,
+      updatedAt: teams.updatedAt,
+      stripeCustomerId: teams.stripeCustomerId,
+      stripeSubscriptionId: teams.stripeSubscriptionId,
+      stripeProductId: teams.stripeProductId,
+      planName: teams.planName,
+      subscriptionStatus: teams.subscriptionStatus,
+    })
+    .from(teams)
+    .where(eq(teams.id, userTeamMember.teamId))
+    .limit(1)
+    .then((rows) => rows[0] || null);
+
+  if (!team) {
+    return null;
+  }
+
+  // Get all team members for this team
+  const members = await db
+    .select({
+      id: teamMembers.id,
+      userId: teamMembers.userId,
+      teamId: teamMembers.teamId,
+      role: teamMembers.role,
+      joinedAt: teamMembers.joinedAt,
+      user: {
+        id: users.id,
+        name: users.name,
+        email: users.email,
+      },
+    })
+    .from(teamMembers)
+    .innerJoin(users, eq(teamMembers.userId, users.id))
+    .where(eq(teamMembers.teamId, team.id));
+
+  return {
+    ...team,
+    teamMembers: members,
+  };
 }
